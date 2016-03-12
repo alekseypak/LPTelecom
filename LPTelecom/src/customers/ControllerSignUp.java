@@ -48,8 +48,10 @@ public class ControllerSignUp extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		// doGet(request, response);
+		request.setCharacterEncoding("UTF-8");
 		String action = request.getParameter("action");
 		if (action != null && action.equals("dosignup")) {
+
 			String email = request.getParameter("email");
 			String password = request.getParameter("password");
 			String repeat_password = request.getParameter("repeat_password");
