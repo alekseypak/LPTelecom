@@ -10,7 +10,9 @@
 
 <h1>LPTelecom</h1>
 
-<h2>Login with email ${email} successful!</h2>
+<h2>Login with email ${email} successful! Hello, ${customer.name}!</h2>
+
+
 
 </body>
 </html>
