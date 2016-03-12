@@ -1,6 +1,7 @@
 package customers;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import data.Customer;
+import data.CustomerDAO;
 
 /**
  * Servlet implementation class ControllerSignUp
@@ -57,16 +58,23 @@ public class ControllerSignUp extends HttpServlet {
 				request.getRequestDispatcher("/signup.jsp").forward(request, response);
 				return;
 			}
+
+			try { // Perhaps this should be higher up?
+				if (CustomerDAO.CustomerWithEmailExists(email)) {
+					request.setAttribute("error_message", "User with email " + email + " already exists.");
+					request.getRequestDispatcher("/signup.jsp").forward(request, response);
+					return;
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if (!password.equals(repeat_password)) {
 				request.setAttribute("error_message", "Passwords do not match");
 				request.getRequestDispatcher("/signup.jsp").forward(request, response);
 				return;
 
-			}
-			if (Customer.CustomerWithEmailExists(email)) {
-				request.setAttribute("error_message", "User with email " + email + " already exists.");
-				request.getRequestDispatcher("/signup.jsp").forward(request, response);
-				return;
 			}
 
 		}
