@@ -37,4 +37,8 @@ public class Customer {
 		this.name = name;
 	}
 
+	public static boolean CustomerWithEmailExists(String email) {
+		return true;
+	}
+
 }

@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import data.Customer;
+
 /**
  * Servlet implementation class ControllerSignUp
  */
@@ -47,10 +49,22 @@ public class ControllerSignUp extends HttpServlet {
 		if (action != null && action.equals("dosignup")) {
 			String email = request.getParameter("email");
 			String password = request.getParameter("password");
+			String repeat_password = request.getParameter("repeat_password");
 			String name = request.getParameter("name");
 			if (email == null || email.isEmpty() || password == null || password.isEmpty() || name == null
-					|| name.isEmpty()) {
-				request.setAttribute("error_message", "Email and password should be both non-empty");
+					|| name.isEmpty() || repeat_password == null || repeat_password.isEmpty()) {
+				request.setAttribute("error_message", "All fields should be both non-empty");
+				request.getRequestDispatcher("/signup.jsp").forward(request, response);
+				return;
+			}
+			if (!password.equals(repeat_password)) {
+				request.setAttribute("error_message", "Passwords do not match");
+				request.getRequestDispatcher("/signup.jsp").forward(request, response);
+				return;
+
+			}
+			if (Customer.CustomerWithEmailExists(email)) {
+				request.setAttribute("error_message", "User with email " + email + " already exists.");
 				request.getRequestDispatcher("/signup.jsp").forward(request, response);
 				return;
 			}

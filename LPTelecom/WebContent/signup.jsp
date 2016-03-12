@@ -16,9 +16,14 @@
 
 <form method="post" action="/LPTelecom/ControllerSignUp">
 <input type="hidden" name="action" value="dosignup"> <br/>
-email: <input type="text" name="email"><br/>
-password: <input type="text" name="password"><br/>
-name: <input type="text" name="name"><br/>
+email:<br />
+ <input type="text" name="email"><br/>
+password: <br />
+<input type="text" name="password"><br/>
+repeat password: <br />
+<input type="text" name="repeat_password"><br/>
+name:  <br />
+<input type="text" name="name"><br/>
 <input type="submit" value="Sign Up">
 </form>
 
