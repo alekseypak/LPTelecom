@@ -12,6 +12,8 @@
 
 <h2>Customer account creation</h2>
 
+<p>Please fill out all fields:</p>
+
 <form method="post" action="/LPTelecom/ControllerSignUp">
 <input type="hidden" name="action" value="dosignup"> <br/>
 email: <input type="text" name="email"><br/>
@@ -19,4 +21,6 @@ password: <input type="text" name="password"><br/>
 name: <input type="text" name="name"><br/>
 <input type="submit" value="Sign Up">
 </form>
+
+<p>${error_message}</p>
 </html>
