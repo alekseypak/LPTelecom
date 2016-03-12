@@ -30,7 +30,7 @@ public class CustomerDAO {
 	}
 
 	public static boolean customerWithEmailExists(String email) throws SQLException {
-		String query = "SELECT count(*) as count FROM customers WHERE email=?";
+		String query = "SELECT count(*) AS count FROM customers WHERE email=?";
 		Connection connection = ConnectionProviderMockup.getConnection();
 		// TODO: connection might be null!
 		PreparedStatement statement = connection.prepareStatement(query);
@@ -45,6 +45,20 @@ public class CustomerDAO {
 		}
 
 		return false;
+	}
+
+	public boolean addCustomer(Customer newCustomer) throws SQLException {
+		// TODO: might be a good idea to run customerWithEmailExists...
+		String query = "INSERT INTO customers (email, password, name) VALUES (?, ?, ?)";
+		Connection connection = ConnectionProviderMockup.getConnection();
+
+		PreparedStatement statement = connection.prepareStatement(query);
+		statement.setString(1, newCustomer.getEmail());
+		statement.setString(2, newCustomer.getPassword());
+		statement.setString(3, newCustomer.getName());
+		statement.executeUpdate();
+		statement.close();
+		return true;
 	}
 
 }
