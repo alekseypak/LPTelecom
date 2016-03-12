@@ -60,7 +60,7 @@ public class ControllerSignUp extends HttpServlet {
 			}
 
 			try { // Perhaps this should be higher up?
-				if (CustomerDAO.CustomerWithEmailExists(email)) {
+				if (CustomerDAO.customerWithEmailExists(email)) {
 					request.setAttribute("error_message", "User with email " + email + " already exists.");
 					request.getRequestDispatcher("/signup.jsp").forward(request, response);
 					return;

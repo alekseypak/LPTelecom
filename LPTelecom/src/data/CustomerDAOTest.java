@@ -20,8 +20,8 @@ public class CustomerDAOTest {
 
 	public static void testJohnExists() {
 		try {
-			System.out.println("Should be true: " + CustomerDAO.CustomerWithEmailExists("john@foo.com"));
-			System.out.println("Should be false: " + CustomerDAO.CustomerWithEmailExists("foo@bar.co"));
+			System.out.println("Should be true: " + CustomerDAO.customerWithEmailExists("john@foo.com"));
+			System.out.println("Should be false: " + CustomerDAO.customerWithEmailExists("foo@bar.co"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

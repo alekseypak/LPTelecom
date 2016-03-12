@@ -29,7 +29,7 @@ public class CustomerDAO {
 
 	}
 
-	public static boolean CustomerWithEmailExists(String email) throws SQLException {
+	public static boolean customerWithEmailExists(String email) throws SQLException {
 		String query = "SELECT count(*) as count FROM customers WHERE email=?";
 		Connection connection = ConnectionProviderMockup.getConnection();
 		// TODO: connection might be null!
