@@ -61,4 +61,17 @@ public class CustomerDAO {
 		return true;
 	}
 
+	public boolean deleteCustomer(Customer badCustomer) throws SQLException {
+		String query = "DELETE FROM customers WHERE email = ?";
+		Connection connection = ConnectionProviderMockup.getConnection();
+
+		PreparedStatement statement = connection.prepareStatement(query);
+		statement.setString(1, badCustomer.getEmail());
+		// statement.setString(2, newCustomer.getPassword());
+		// statement.setString(3, newCustomer.getName());
+		statement.executeUpdate();
+		statement.close();
+		return true;
+	}
+
 }
