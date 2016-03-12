@@ -15,10 +15,10 @@ public class ConnectionProviderMockup {
 		Connection conn = null;
 		try {
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/lptelecom", "root", "root");
-			System.out.println("Success!");
+			System.out.println("Successfully connected to database.");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			System.out.println("No success! :(");
+			System.out.println("Database connection failed! :(");
 			e.printStackTrace();
 		}
 		return conn;
