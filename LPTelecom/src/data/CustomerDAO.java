@@ -8,12 +8,16 @@ import java.sql.SQLException;
 public class CustomerDAO {
 	private Connection connection;
 
+	public CustomerDAO() {
+	}
+
 	public Customer getCustomer(String email) throws SQLException {
 		String query = "SELECT * FROM customers WHERE email=?";
-		// TODO: get a connection.
+		connection = ConnectionProviderMockup.getConnection();
+		// TODO: connection might be null!
 		PreparedStatement statement = connection.prepareStatement(query);
 		statement.setString(1, email);
-		Customer customer;
+		Customer customer = null;
 
 		ResultSet rs = statement.executeQuery();
 		if (rs.next()) {

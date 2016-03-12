@@ -10,24 +10,34 @@ import javax.sql.DataSource;
 
 public class ConnectionProvider {
 	private static ConnectionProvider instance = new ConnectionProvider();
-	private DataSource ds;
+	private static DataSource ds;
 
 	private ConnectionProvider() {
+		System.out.println("Trying to create a DataSource.");
 		try {
 			InitialContext initContext = new InitialContext();
-			Context env = (Context) initContext.lookup("java:comp/env");
 
+			System.out.println("Hello1");
+			Context env = (Context) initContext.lookup("java:comp/env");
+			System.out.println("Hello2");
 			ds = (DataSource) env.lookup("jdbc/lptelecom");
+			System.out.println("Created a DataSource.");
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			// TODO: add logging here.
+			e.printStackTrace();
 		}
 	}
 
-	private static Connection getConnection() {
+	public static ConnectionProvider getInstance() {
+		return instance;
+	}
+
+	public static Connection getConnection() {
 		Connection connection = null;
 		try {
-			connection = instance.ds.getConnection();
+			DataSource dds = ConnectionProvider.instance.ds;
+			connection = dds.getConnection();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			// TODO: add logging here.
