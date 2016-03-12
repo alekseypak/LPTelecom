@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import data.Customer;
 import data.CustomerDAO;
@@ -55,8 +56,13 @@ public class ControllerSignUp extends HttpServlet {
 			String name = request.getParameter("name");
 			if (email == null || email.isEmpty() || password == null || password.isEmpty() || name == null
 					|| name.isEmpty() || repeat_password == null || repeat_password.isEmpty()) {
-				request.setAttribute("error_message", "All fields should be both non-empty");
-				request.getRequestDispatcher("/signup.jsp").forward(request, response);
+				HttpSession session = request.getSession(false);
+				// getSession(false) means a session is not to be created if it
+				// doesn't exist.
+				session.setAttribute("error_message", "All fields should be both non-empty");
+				response.sendRedirect("/LPTelecom/signup.jsp");
+				// request.getRequestDispatcher("/signup.jsp").forward(request,
+				// response);
 				return;
 			}
 
