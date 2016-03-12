@@ -6,7 +6,7 @@ public class CustomerDAOTest {
 	public static void main(String[] args) {
 		CustomerDAO customerDAO = new CustomerDAO();
 		testJohn(customerDAO);
-		testJohnExists(customerDAO);
+		testJohnExists();
 	}
 
 	public static void testJohn(CustomerDAO customerDAO) {
@@ -18,10 +18,10 @@ public class CustomerDAOTest {
 		}
 	}
 
-	public static void testJohnExists(CustomerDAO customerDAO) {
+	public static void testJohnExists() {
 		try {
-			System.out.println(customerDAO.CustomerWithEmailExists("john@bar.com"));
-			System.out.println(customerDAO.CustomerWithEmailExists("foo@bar.co"));
+			System.out.println("Should be true: " + CustomerDAO.CustomerWithEmailExists("john@foo.com"));
+			System.out.println("Should be false: " + CustomerDAO.CustomerWithEmailExists("foo@bar.co"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

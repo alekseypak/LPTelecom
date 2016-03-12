@@ -40,7 +40,7 @@ public class CustomerDAO {
 		if (rs.next()) {
 			// count should never be more than 1.
 			int c = rs.getInt("count");
-			System.out.println(email + " " + c);
+			// System.out.println(email + " " + c);
 			return c > 0;
 		}
 
