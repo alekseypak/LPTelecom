@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import data.Customer;
 import data.CustomerDAO;
 
 /**
@@ -75,6 +76,18 @@ public class ControllerSignUp extends HttpServlet {
 				request.getRequestDispatcher("/signup.jsp").forward(request, response);
 				return;
 
+			}
+
+			Customer newCustomer = new Customer(email, password, name);
+			CustomerDAO customerDAO = new CustomerDAO();
+			try {
+				customerDAO.addCustomer(newCustomer);
+				System.out.println("Customer " + email + " created");
+				response.sendRedirect("/LPTelecom/login.jsp");
+				// request.setAttribute("message", );
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 
 		}
