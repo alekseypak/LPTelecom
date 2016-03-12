@@ -12,5 +12,7 @@
 
 <h2>Login failed!</h2>
 
+<p>${error_message}</p>
+
 </body>
 </html>
