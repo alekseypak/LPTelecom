@@ -18,10 +18,10 @@ public class TelecomServiceDAO {
 		List<TelecomService> serviceList = new LinkedList<>();
 		while (rs.next()) {
 			// String password = rs.getString("password");
-			int id = rs.getInt("id");
-			String name = rs.getString("name");
+			int id = rs.getInt("service_id");
+			String name = rs.getString("service_name");
 			String description = rs.getString("descr");
-			String name_alt = rs.getString("name_alt");
+			String name_alt = rs.getString("service_name_alt");
 			String description_alt = rs.getString("descr_alt");
 			TelecomService newService = new TelecomService(id, name, name_alt, description, description_alt);
 			serviceList.add(newService);
