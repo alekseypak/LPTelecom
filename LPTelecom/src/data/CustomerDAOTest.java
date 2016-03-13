@@ -8,6 +8,9 @@ public class CustomerDAOTest {
 		testJohn(customerDAO);
 		testJohnExists();
 		testCreationAndDeletion(customerDAO, "ivan@foo.com", "12345", "Ivan Ivanov");
+		System.out.println("Next id better be 15.");
+		testGetCustomerIdByEmail("a@a.com");
+
 		/*
 		 * try { customerDAO.addCustomer(new Customer("b@a.com", "111",
 		 * "Валентин Заблокировский", "blocked")); } catch (SQLException e) { //
@@ -57,6 +60,19 @@ public class CustomerDAOTest {
 			e.printStackTrace();
 		}
 
+	}
+
+	public static int testGetCustomerIdByEmail(String email) {
+		try {
+
+			int customerIdByEmail = CustomerDAO.getCustomerIdByEmail(email);
+			System.out.printf("Id for %s is %d.\n", email, customerIdByEmail);
+			return customerIdByEmail;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return -1;
 	}
 
 }

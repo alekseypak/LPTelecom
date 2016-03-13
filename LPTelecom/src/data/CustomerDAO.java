@@ -74,4 +74,22 @@ public class CustomerDAO {
 		return true;
 	}
 
+	public static int getCustomerId(Customer customer) throws SQLException {
+		getCustomerIdByEmail(customer.getEmail());
+		return -1;
+
+	}
+
+	public static int getCustomerIdByEmail(String email) throws SQLException {
+		String query = "SELECT customer_id FROM customers WHERE email=?";
+		Connection connection = ConnectionProviderMockup.getConnection();
+		PreparedStatement statement = connection.prepareStatement(query);
+		statement.setString(1, email);
+		ResultSet rs = statement.executeQuery();
+		if (rs.next()) {
+			int customer_id = rs.getInt("customer_id");
+			return customer_id;
+		}
+		return -1;
+	}
 }
