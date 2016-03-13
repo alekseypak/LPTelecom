@@ -1,7 +1,13 @@
 package data;
 
-public class TelecomService {
+import java.io.Serializable;
 
+public class TelecomService implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6235688574230984183L;
 	private String name;
 
 	public TelecomService(String name, String name_alt, String descr, String descr_alt) {
