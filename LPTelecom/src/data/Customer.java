@@ -5,12 +5,18 @@ public class Customer {
 	private String email;
 	private String password;
 	private String name;
+	private String status;
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 	public Customer(String email, String password, String name) {
-		super();
-		this.email = email;
-		this.password = password;
-		this.name = name;
+		this(email, password, name, "active");
 	}
 
 	public String getEmail() {
@@ -19,6 +25,14 @@ public class Customer {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public Customer(String email, String password, String name, String status) {
+		super();
+		this.email = email;
+		this.password = password;
+		this.name = name;
+		this.status = status;
 	}
 
 	public String getPassword() {

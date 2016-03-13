@@ -49,13 +49,14 @@ public class CustomerDAO {
 
 	public boolean addCustomer(Customer newCustomer) throws SQLException {
 		// TODO: might be a good idea to run customerWithEmailExists...
-		String query = "INSERT INTO customers (email, password, name) VALUES (?, ?, ?)";
+		String query = "INSERT INTO customers (email, password, name, status) VALUES (?, ?, ?, ?)";
 		Connection connection = ConnectionProviderMockup.getConnection();
 
 		PreparedStatement statement = connection.prepareStatement(query);
 		statement.setString(1, newCustomer.getEmail());
 		statement.setString(2, newCustomer.getPassword());
 		statement.setString(3, newCustomer.getName());
+		statement.setString(4, newCustomer.getStatus());
 		statement.executeUpdate();
 		statement.close();
 		return true;
@@ -67,8 +68,6 @@ public class CustomerDAO {
 
 		PreparedStatement statement = connection.prepareStatement(query);
 		statement.setString(1, badCustomer.getEmail());
-		// statement.setString(2, newCustomer.getPassword());
-		// statement.setString(3, newCustomer.getName());
 		statement.executeUpdate();
 		statement.close();
 		return true;

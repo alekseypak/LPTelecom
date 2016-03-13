@@ -8,6 +8,11 @@ public class CustomerDAOTest {
 		testJohn(customerDAO);
 		testJohnExists();
 		testCreationAndDeletion(customerDAO, "ivan@foo.com", "12345", "Ivan Ivanov");
+		/*
+		 * try { customerDAO.addCustomer(new Customer("b@a.com", "111",
+		 * "Валентин Заблокировский", "blocked")); } catch (SQLException e) { //
+		 * TODO Auto-generated catch block e.printStackTrace(); }
+		 */
 
 	}
 
@@ -31,7 +36,12 @@ public class CustomerDAOTest {
 	}
 
 	public static void testCreationAndDeletion(CustomerDAO customerDAO, String email, String password, String name) {
-		Customer newCustomer = new Customer(email, password, name);
+		testCreationAndDeletion(customerDAO, email, password, name, "active");
+	}
+
+	public static void testCreationAndDeletion(CustomerDAO customerDAO, String email, String password, String name,
+			String status) {
+		Customer newCustomer = new Customer(email, password, name, status);
 		try {
 			// TODO: Should remove Ivan first.
 
@@ -46,6 +56,7 @@ public class CustomerDAOTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 	}
 
 }
