@@ -49,6 +49,7 @@ public class ControllerSignUp extends HttpServlet {
 		// TODO Auto-generated method stub
 		// doGet(request, response);
 		request.setCharacterEncoding("UTF-8");
+		// TODO: perhaps, a filter would be nice here.
 		String action = request.getParameter("action");
 		if (action != null && action.equals("dosignup")) {
 
