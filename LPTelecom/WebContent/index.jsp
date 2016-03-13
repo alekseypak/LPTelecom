@@ -9,6 +9,8 @@
 <body>
 <h1>LPTelecom</h1>
 <ul>
+<li><a href="/LPTelecom/ControllerListAllServices?lang=eng">List all services</a></li>
+<li><a href="/LPTelecom/ControllerListAllServices?lang=rus">Список услуг</a></li>
 <li><a href="login.jsp">Log in</a></li>
 <li><a href="signup.jsp">Sign up</a></li>
 <li>Admin log in</li>
