@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import data.Customer;
 import data.CustomerDAO;
+import data.InvoiceDAO;
 import data.TelecomServiceDAO;
 
 /**
@@ -68,8 +69,9 @@ public class ControllerLogin extends HttpServlet {
 					request.setAttribute("email", email);
 					HttpSession session = request.getSession(false);
 					session.setAttribute("customer", customer);
+					session.setAttribute("invoices", InvoiceDAO.getInvoicesForCustomer(customer));
 					session.setAttribute("all_services", TelecomServiceDAO.getAllTelecomServices());
-					System.out.println("User found! Password correct.");
+					System.out.println("Email " + email + " found! Password correct.");
 
 					request.getRequestDispatcher("/loginsuccess.jsp").forward(request, response);
 					return;
