@@ -23,7 +23,8 @@ public class CustomerDAO {
 		if (rs.next()) {
 			String password = rs.getString("password");
 			String name = rs.getString("name");
-			customer = new Customer(email, password, name);
+			String status = rs.getString("status");
+			customer = new Customer(email, password, name, status);
 		}
 		return customer;
 
