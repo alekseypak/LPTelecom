@@ -13,7 +13,7 @@ public class TelecomServiceDAOTest {
 		System.out.println("Let's try to get all the services...");
 		try {
 			for (TelecomService ts : TelecomServiceDAO.getAllTelecomServices()) {
-				System.out.printf("%s: %s\n", ts.getName(), ts.getDescr());
+				System.out.printf("%s: %s: %s\n", ts.getId(), ts.getName(), ts.getDescr());
 
 			}
 			;

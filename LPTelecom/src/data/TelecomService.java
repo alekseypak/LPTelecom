@@ -9,9 +9,13 @@ public class TelecomService implements Serializable {
 	 */
 	private static final long serialVersionUID = -6235688574230984183L;
 	private String name;
+	private int id;
+	// This is the same id you would see in the database.
+	// Rationale: name is subject to change.
 
-	public TelecomService(String name, String name_alt, String descr, String descr_alt) {
+	public TelecomService(int id, String name, String name_alt, String descr, String descr_alt) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.name_alt = name_alt;
 		this.descr = descr;
@@ -48,6 +52,14 @@ public class TelecomService implements Serializable {
 
 	public void setDescr_alt(String descr_alt) {
 		this.descr_alt = descr_alt;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	private String name_alt;
