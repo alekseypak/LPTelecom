@@ -19,11 +19,13 @@ public class TelecomServiceDAO {
 		while (rs.next()) {
 			// String password = rs.getString("password");
 			int id = rs.getInt("service_id");
-			String name = rs.getString("service_name");
+			String service_name = rs.getString("service_name");
 			String description = rs.getString("descr");
-			String name_alt = rs.getString("service_name_alt");
+			String service_name_alt = rs.getString("service_name_alt");
 			String description_alt = rs.getString("descr_alt");
-			TelecomService newService = new TelecomService(id, name, name_alt, description, description_alt);
+
+			TelecomService newService = new TelecomService(id, service_name, service_name_alt, description,
+					description_alt);
 			serviceList.add(newService);
 			// customer = new Customer(email, password, name);
 		}
