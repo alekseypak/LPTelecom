@@ -17,6 +17,7 @@ public class InvoiceDAOTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		statusUpdateTest("john@foo.com", true);
 
 	}
 
@@ -64,6 +65,33 @@ public class InvoiceDAOTest {
 
 			}
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	private static void statusUpdateTest(String email, boolean payed) {
+		System.out.println("Let's try to change an invoice status.");
+
+		List<Invoice> invoiceList;
+		try {
+			invoiceList = InvoiceDAO.getInvoicesForEmail(email);
+			listGetterWithEmailTest(email);
+			if (!invoiceList.isEmpty()) {
+				Invoice invoice = invoiceList.get(0);
+				try {
+					InvoiceDAO.SetInvoiceStatus(invoice, payed ? "payed" : "not payed", payed);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				listGetterWithEmailTest(email);
+			}
+
+		} catch (
+
+		SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

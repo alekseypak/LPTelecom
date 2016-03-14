@@ -36,6 +36,7 @@ public class InvoiceDAO {
 			String invoice_status = rs.getString("invoice_status");
 			invoiceList.add(new Invoice(customer, newService, payed, invoice_status));
 		}
+		statement.close();
 		return invoiceList;
 
 	}
@@ -74,8 +75,29 @@ public class InvoiceDAO {
 			String invoice_status = rs.getString("invoice_status");
 			invoiceList.add(new Invoice(customer, newService, payed, invoice_status));
 		}
+		statement.close();
 		return invoiceList;
 
+	}
+
+	public static boolean SetInvoiceStatus(Invoice invoice, String status, boolean payed) throws SQLException {
+		String query = "UPDATE invoices SET invoice_status=?, payed=? WHERE customer_id=? AND service_id=?";
+		Connection connection = ConnectionProviderMockup.getConnection();
+		PreparedStatement statement = connection.prepareStatement(query);
+		statement.setString(1, status);
+		statement.setInt(2, payed ? 1 : 0);
+		// This is correct!
+		// > The driver converts this to an SQL BIT or BOOLEAN value when it
+		// > sends it to the database.
+		// https://docs.oracle.com/javase/7/docs/api/java/sql/PreparedStatement.html#setBoolean(int,%20boolean)
+		// We have a TinyInt(1) instead.>
+		statement.setInt(3, CustomerDAO.getCustomerId(invoice.getInvoiceCustomer()));
+		statement.setInt(4, invoice.getInvoiceTelecomService().getId());
+		System.out.println(statement.toString());
+		int result = statement.executeUpdate();
+		System.out.println(result);
+		statement.close();
+		return true;
 	}
 
 }
