@@ -61,6 +61,8 @@
 
 		</c:forEach>
 	</ul>
-
+	<form method="post" action="/LPTelecom/ControllerLogout">
+		<input type="submit" value="Logout">
+	</form>
 </body>
 </html>
