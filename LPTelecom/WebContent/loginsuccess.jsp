@@ -13,6 +13,7 @@
 	<h1>LPTelecom</h1>
 
 	<h2>Login with email ${email} successful! Hello, ${customer.name}!</h2>
+	
 	<%-- 	<ul>
 		<c:forEach var="element" items="${all_services}">
 
@@ -45,8 +46,9 @@
 					<div>
 					<%-- <p>Hidden parameters: email: ${customer.email}, service_id: ${invoice.invoiceTelecomService.id}</p> --%>
 					<form method="post" action="/LPTelecom/ControllerPayment">
-						<input type="hidden" name="email" value=${customer.email}>
+						<input type="hidden" name="email" value="${customer.email}">
 						<input type="hidden" name="service_id" value="${invoice.invoiceTelecomService.id}">
+						<input type="hidden" name="payed_now" value="true">
 						<label for="cc_number">Enter you CC card number: </label> 
 						<input id="cc_number" type="text" name="cc_number">
 						<input type="submit" value="Pay">
