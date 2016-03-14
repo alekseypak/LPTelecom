@@ -11,7 +11,7 @@ public class InvoiceDAO {
 	public static List<Invoice> getAllInvoices() throws SQLException {
 		String query = "SELECT * " + "FROM customers JOIN invoices JOIN telecom_services "
 				+ "ON customers.customer_id = invoices.customer_id AND invoices.service_id = telecom_services.service_id";
-		Connection connection = ConnectionProviderMockup.getConnection();
+		Connection connection = getConnection();
 
 		PreparedStatement statement = connection.prepareStatement(query);
 
@@ -49,7 +49,7 @@ public class InvoiceDAO {
 		String query = "SELECT * FROM customers JOIN invoices JOIN telecom_services "
 				+ "ON customers.customer_id = invoices.customer_id AND invoices.service_id = telecom_services.service_id "
 				+ "WHERE email = ? ";
-		Connection connection = ConnectionProviderMockup.getConnection();
+		Connection connection = getConnection();
 
 		PreparedStatement statement = connection.prepareStatement(query);
 
@@ -82,7 +82,7 @@ public class InvoiceDAO {
 
 	public static boolean SetInvoiceStatus(Invoice invoice, String status, boolean payed) throws SQLException {
 		String query = "UPDATE invoices SET invoice_status=?, payed=? WHERE customer_id=? AND service_id=?";
-		Connection connection = ConnectionProviderMockup.getConnection();
+		Connection connection = getConnection();
 		PreparedStatement statement = connection.prepareStatement(query);
 		statement.setString(1, status);
 		statement.setInt(2, payed ? 1 : 0);
@@ -98,8 +98,41 @@ public class InvoiceDAO {
 		return result == 1;
 	}
 
-	public static boolean SetInvoiceStatus(Invoice invoice, boolean payed) throws SQLException {
+	private static Connection getConnection() {
+		Connection connection = ConnectionProviderMockup.getConnection();
+		return connection;
+	}
+
+	public static boolean setInvoiceStatus(Invoice invoice, boolean payed) throws SQLException {
 		return SetInvoiceStatus(invoice, payed ? "payed" : "not payed", payed);
+	}
+
+	public static boolean deleteInvoice(Invoice badInvoice) throws SQLException {
+		String query = "DELETE FROM invoices WHERE customer_id = ? AND service_id = ?";
+		Connection connection = getConnection();
+
+		PreparedStatement statement = connection.prepareStatement(query);
+		statement.setInt(1, CustomerDAO.getCustomerIdByEmail(badInvoice.getInvoiceCustomer().getEmail()));
+		statement.setInt(2, badInvoice.getInvoiceTelecomService().getId());
+		statement.executeUpdate();
+		statement.close();
+		return true;
+	}
+
+	public static boolean insertInvoice(Invoice newInvoice) throws SQLException {
+		// TODO: might be a good idea to run customerWithEmailExists...
+		String query = "INSERT INTO invoices (customer_id, service_id, payed, invoice_status) VALUES (?, ?, ?, ?)";
+		Connection connection = getConnection();
+		PreparedStatement statement = connection.prepareStatement(query);
+
+		int customer_id = CustomerDAO.getCustomerId(newInvoice.getInvoiceCustomer());
+		statement.setInt(1, customer_id);
+		statement.setInt(2, newInvoice.getInvoiceTelecomService().getId());
+		statement.setInt(3, newInvoice.isPayed() ? 1 : 0);
+		statement.setString(4, newInvoice.getStatus());
+		statement.executeUpdate();
+		statement.close();
+		return true;
 	}
 
 }

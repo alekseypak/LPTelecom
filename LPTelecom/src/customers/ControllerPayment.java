@@ -2,6 +2,7 @@ package customers;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -49,7 +50,7 @@ public class ControllerPayment extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		HttpSession session = request.getSession(false);
+		HttpSession session = request.getSession();
 		String email = request.getParameter("email");
 		String service_id_string = request.getParameter("service_id");
 		int service_id = Integer.parseInt(service_id_string);
@@ -60,7 +61,7 @@ public class ControllerPayment extends HttpServlet {
 			payed_now = payed_now_string.equals("true");
 		}
 
-		List<Invoice> invoiceList = null;
+		List<Invoice> invoiceList = new ArrayList<Invoice>();
 		Invoice invoice_to_be_updated = null;
 		// That doesn't look like a good idea.
 		// TODO: ask someone about the idiomatic solution.
@@ -75,16 +76,16 @@ public class ControllerPayment extends HttpServlet {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		System.err.printf("Correct service id: %d", service_id);
+		System.out.printf("Correct service id: %d", service_id);
 		for (Invoice invoice : invoiceList) {
-			System.err.printf("Current service id: %d", invoice.getInvoiceTelecomService().getId());
+			System.out.printf("Current service id: %d", invoice.getInvoiceTelecomService().getId());
 			if (invoice.getInvoiceTelecomService().getId() == service_id) {
 				invoice_to_be_updated = invoice;
 				break;
 			}
 		}
 		try {
-			InvoiceDAO.SetInvoiceStatus(invoice_to_be_updated, payed_now);
+			InvoiceDAO.setInvoiceStatus(invoice_to_be_updated, payed_now);
 			String success_message = "Successful payment for "
 					+ invoice_to_be_updated.getInvoiceTelecomService().getName();
 			request.setAttribute("message", success_message);

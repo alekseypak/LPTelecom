@@ -19,6 +19,8 @@ public class InvoiceDAOTest {
 		}
 		statusUpdateTest("john@foo.com");
 
+		DeleteInvoiceTest();
+
 	}
 
 	private static void listGetterTest() {
@@ -82,7 +84,7 @@ public class InvoiceDAOTest {
 				System.out.printf("Its billed to %s for %s and the status is %s.\n",
 						invoice.getInvoiceCustomer().getName(), invoice.getInvoiceTelecomService().getName(),
 						invoice.getStatus());
-				InvoiceDAO.SetInvoiceStatus(invoice, !invoice.isPayed());
+				InvoiceDAO.setInvoiceStatus(invoice, !invoice.isPayed());
 				invoiceList = InvoiceDAO.getInvoicesForEmail(email);
 				Invoice hopefully_update_invoice = invoiceList.get(0);
 				System.out.printf("Its billed to %s for %s and the status is %s.\n",
@@ -94,6 +96,54 @@ public class InvoiceDAOTest {
 		} catch (
 
 		SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	private static Invoice createInvoiceTest(Customer customer, TelecomService telecomService) {
+		Invoice newInvoice = new Invoice(customer, telecomService);
+		return createInvoiceTest(newInvoice);
+	}
+
+	private static Invoice createInvoiceTest(Invoice newInvoice) {
+		// TODO Auto-generated method stub
+		System.out.printf("Let's try to create a new Invoice for %s and %s.\n",
+				newInvoice.getInvoiceCustomer().getName(), newInvoice.getInvoiceTelecomService().getName());
+		try {
+
+			InvoiceDAO.insertInvoice(newInvoice);
+			return newInvoice;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private static void createAndDeleteInvoiceTest(Invoice invoice) {
+		try {
+			createInvoiceTest(invoice);
+
+			listGetterWithCustomerTest(invoice.getInvoiceCustomer());
+			System.out.println("Let's try to delete it now.");
+			InvoiceDAO.deleteInvoice(invoice);
+			listGetterWithCustomerTest(invoice.getInvoiceCustomer());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	private static void DeleteInvoiceTest() {
+		CustomerDAO customerDAO = new CustomerDAO();
+		try {
+			Customer customer = customerDAO.getCustomer("john@foo.com");
+			TelecomService telecomService = TelecomServiceDAO.getAllTelecomServices().get(1);
+			createAndDeleteInvoiceTest(new Invoice(customer, telecomService));
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
