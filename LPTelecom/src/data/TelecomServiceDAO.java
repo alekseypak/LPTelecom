@@ -9,10 +9,15 @@ import java.util.List;
 
 public class TelecomServiceDAO {
 
+	private static Connection getConnection() {
+		Connection connection = ConnectionProviderMockup.getConnection();
+		return connection;
+	}
+
 	public static List<TelecomService> getAllTelecomServices() throws SQLException {
 		String query = "SELECT * FROM telecom_services";
 
-		Connection connection = ConnectionProviderMockup.getConnection();
+		Connection connection = getConnection();
 		PreparedStatement statement = connection.prepareStatement(query);
 		ResultSet rs = statement.executeQuery();
 		List<TelecomService> serviceList = new LinkedList<>();
@@ -29,9 +34,31 @@ public class TelecomServiceDAO {
 			serviceList.add(newService);
 			// customer = new Customer(email, password, name);
 		}
+		rs.close();
+		connection.close();
 		return serviceList;
 		// return customer;
 		// return null;
+	}
+
+	public static TelecomService getTelecomServiceById(int id) throws SQLException {
+		String query = "SELECT * FROM telecom_services WHERE service_id = ?";
+
+		Connection connection = getConnection();
+		PreparedStatement statement = connection.prepareStatement(query);
+		ResultSet rs = statement.executeQuery();
+		if (rs.next()) {
+			// String password = rs.getString("password");
+			String service_name = rs.getString("service_name");
+			String description = rs.getString("descr");
+			String service_name_alt = rs.getString("service_name_alt");
+			String description_alt = rs.getString("descr_alt");
+
+			TelecomService newService = new TelecomService(id, service_name, service_name_alt, description,
+					description_alt);
+			return newService;
+		}
+		return null;
 	}
 
 }
