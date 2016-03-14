@@ -59,7 +59,7 @@ public class ControllerSignUp extends HttpServlet {
 			String name = request.getParameter("name");
 			if (email == null || email.isEmpty() || password == null || password.isEmpty() || name == null
 					|| name.isEmpty() || repeat_password == null || repeat_password.isEmpty()) {
-				HttpSession session = request.getSession(false);
+				HttpSession session = request.getSession();
 				// getSession(false) means a session is not to be created if it
 				// doesn't exist.
 				session.setAttribute("error_message", "All fields should be both non-empty");

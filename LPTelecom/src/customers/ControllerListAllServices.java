@@ -35,7 +35,7 @@ public class ControllerListAllServices extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		HttpSession session = request.getSession(false);
+		HttpSession session = request.getSession();
 		try {
 			session.setAttribute("all_services", TelecomServiceDAO.getAllTelecomServices());
 		} catch (SQLException e) {
