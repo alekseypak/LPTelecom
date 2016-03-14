@@ -2,6 +2,8 @@ package customers;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +14,9 @@ import javax.servlet.http.HttpSession;
 
 import data.Customer;
 import data.CustomerDAO;
+import data.Invoice;
 import data.InvoiceDAO;
+import data.TelecomService;
 import data.TelecomServiceDAO;
 
 /**
@@ -75,11 +79,43 @@ public class ControllerLogin extends HttpServlet {
 					// I do get NullPointerExceptions on the next line.
 					// TODO: learn the session lifecycle.
 					session.setAttribute("customer", customer);
-					session.setAttribute("invoices", InvoiceDAO.getInvoicesForCustomer(customer));
-					session.setAttribute("all_services", TelecomServiceDAO.getAllTelecomServices());
+					List<Invoice> invoicesForCustomer = InvoiceDAO.getInvoicesForCustomer(customer);
+					session.setAttribute("invoices", invoicesForCustomer);
+					List<TelecomService> allTelecomServices = TelecomServiceDAO.getAllTelecomServices();
+					session.setAttribute("all_services", allTelecomServices);
+					List<TelecomService> missingTelecomServices = new LinkedList<TelecomService>();
+					List<TelecomService> customerTelecomServices = new LinkedList<TelecomService>();
+					for (Invoice customerInvoice : invoicesForCustomer) {
+						customerTelecomServices.add(customerInvoice.getInvoiceTelecomService());
+					}
+					for (TelecomService ts : allTelecomServices) {
+						System.out.println(ts.getName());
+						System.out.println(customerTelecomServices.contains(ts));
+						System.out.println(customerTelecomServices.indexOf(ts));
+						if (!customerTelecomServices.contains(ts)) {
+							missingTelecomServices.add(ts);
+						}
+					}
+
+					System.out.println("Listing all TelecomServices");
+					for (TelecomService ts : allTelecomServices) {
+						System.out.println(ts.getName());
+					}
+					System.out.println("Listing customer TelecomServices");
+					for (TelecomService ts : customerTelecomServices) {
+						System.out.println(ts.getName());
+					}
+					System.out.println(allTelecomServices.get(1).getName());
+					System.out.println(customerTelecomServices.get(0).getName());
+					System.out.println(allTelecomServices.get(1).equals(customerTelecomServices.get(0)));
+					System.out.println(allTelecomServices.get(1).getId() == customerTelecomServices.get(0).getId());
+					// missingTelecomServices.removeAll(customerTelecomServices);
+					session.setAttribute("missingServices", missingTelecomServices);
+					System.out.printf("There are %d missing services and %d customer services.\n",
+							missingTelecomServices.size(), customerTelecomServices.size());
 					String success_message = "Login with email " + email + " successful!";
-					System.out.println(success_message);
 					request.setAttribute("message", success_message);
+					System.out.println(success_message);
 					request.getRequestDispatcher("/loginsuccess.jsp").forward(request, response);
 					return;
 				} else {
