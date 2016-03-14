@@ -12,7 +12,10 @@
 
 	<h1>LPTelecom</h1>
 
-	<h2>Login with email ${email} successful! Hello, ${customer.name}!</h2>
+	<h2>Hello, ${customer.name}!</h2>
+	
+	<%-- <c:out value="Login with email ${email} successful!" /> --%>
+	<c:out value="${message}" />
 	
 	<%-- 	<ul>
 		<c:forEach var="element" items="${all_services}">

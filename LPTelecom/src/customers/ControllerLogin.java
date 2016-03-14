@@ -67,12 +67,19 @@ public class ControllerLogin extends HttpServlet {
 				Customer customer = customerDAO.getCustomer(email);
 				if (customer != null && customer.getPassword().equals(password)) {
 					request.setAttribute("email", email);
-					HttpSession session = request.getSession(false);
+					HttpSession session = request.getSession();
+					// request.getSession(false) returns null if there is no
+					// existing session.
+					// I don't quite understand why a session might not exist at
+					// this point, but it happens apparently.
+					// I do get NullPointerExceptions on the next line.
+					// TODO: learn the session lifecycle.
 					session.setAttribute("customer", customer);
 					session.setAttribute("invoices", InvoiceDAO.getInvoicesForCustomer(customer));
 					session.setAttribute("all_services", TelecomServiceDAO.getAllTelecomServices());
-					System.out.println("Email " + email + " found! Password correct.");
-
+					String success_message = "Login with email " + email + " successful!";
+					System.out.println(success_message);
+					request.setAttribute("message", success_message);
 					request.getRequestDispatcher("/loginsuccess.jsp").forward(request, response);
 					return;
 				} else {
