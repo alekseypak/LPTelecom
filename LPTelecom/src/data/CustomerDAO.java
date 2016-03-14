@@ -75,9 +75,7 @@ public class CustomerDAO {
 	}
 
 	public static int getCustomerId(Customer customer) throws SQLException {
-		getCustomerIdByEmail(customer.getEmail());
-		return -1;
-
+		return getCustomerIdByEmail(customer.getEmail());
 	}
 
 	public static int getCustomerIdByEmail(String email) throws SQLException {
