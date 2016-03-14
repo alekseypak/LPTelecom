@@ -5,6 +5,7 @@ import java.sql.SQLException;
 public class TelecomServiceDAOTest {
 	public static void main(String[] args) {
 		listGetterTest();
+		getByIdTest(1);
 	}
 
 	private static void listGetterTest() {
@@ -20,6 +21,19 @@ public class TelecomServiceDAOTest {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+
+	private static TelecomService getByIdTest(int id) {
+		System.out.printf("Let's try to get the service with id %s...\n", id);
+		try {
+			TelecomService telecomServiceRetvievedById = TelecomServiceDAO.getTelecomServiceById(id);
+			System.out.println(telecomServiceRetvievedById.getName());
+			return telecomServiceRetvievedById;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
 		}
 	}
 

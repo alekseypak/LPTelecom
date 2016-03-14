@@ -46,6 +46,7 @@ public class TelecomServiceDAO {
 
 		Connection connection = getConnection();
 		PreparedStatement statement = connection.prepareStatement(query);
+		statement.setInt(1, id);
 		ResultSet rs = statement.executeQuery();
 		if (rs.next()) {
 			// String password = rs.getString("password");
