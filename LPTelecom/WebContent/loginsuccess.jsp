@@ -13,22 +13,20 @@
 	<h1>LPTelecom</h1>
 
 	<h2>Hello, ${customer.name}!</h2>
-	
-	<%-- <c:out value="Login with email ${email} successful!" /> --%>
+
 	<c:out value="${message}" />
+
 	
-	<%-- 	<ul>
-		<c:forEach var="element" items="${all_services}">
+	<form method="post" action="/LPTelecom/ControllerRename">
+	<h3>Tired of your old name?</h3>
+		<input type="hidden" name="email" value="${customer.email}"> <label
+			for="new_name">Enter new name: </label> <input id="new_name"
+			type="text" name="new_name"> <input type="submit"
+			value="Rename">
+	</form>
 
-			<li>
-				<h4>
-					<c:out value="${element.name}" />										 
-				</h4>
-				<c:out value="${element.descr}" />				
-			</li>
 
-		</c:forEach>
-	</ul> --%>
+	
 
 	<h3>Your invoices:</h3>
 	<ul>
@@ -47,15 +45,16 @@
 						<strong>Not payed!</strong>
 					</p>
 					<div>
-					<%-- <p>Hidden parameters: email: ${customer.email}, service_id: ${invoice.invoiceTelecomService.id}</p> --%>
-					<form method="post" action="/LPTelecom/ControllerPayment">
-						<input type="hidden" name="email" value="${customer.email}">
-						<input type="hidden" name="service_id" value="${invoice.invoiceTelecomService.id}">
-						<input type="hidden" name="payed_now" value="true">
-						<label for="cc_number">Enter you CC card number: </label> 
-						<input id="cc_number" type="text" name="cc_number">
-						<input type="submit" value="Pay">
-					</form>
+						<%-- <p>Hidden parameters: email: ${customer.email}, service_id: ${invoice.invoiceTelecomService.id}</p> --%>
+						<form method="post" action="/LPTelecom/ControllerPayment">
+							<input type="hidden" name="email" value="${customer.email}">
+							<input type="hidden" name="service_id"
+								value="${invoice.invoiceTelecomService.id}"> <input
+								type="hidden" name="payed_now" value="true"> <label
+								for="cc_number">Enter you CC card number: </label> <input
+								id="cc_number" type="text" name="cc_number"> <input
+								type="submit" value="Pay">
+						</form>
 					</div>
 				</c:if>
 			</li>

@@ -11,6 +11,11 @@ public class CustomerDAOTest {
 		System.out.println("Next id better be 15.");
 		testGetCustomerIdByEmail("a@a.com");
 
+		testRenameCustomer(testGetJohn(), "Some other name");
+		testRenameCustomer(testGetJohn(), "John Smith");
+
+		// testRenameCustomer(testGetJohn(), "Some other name");
+
 		/*
 		 * try { customerDAO.addCustomer(new Customer("b@a.com", "111",
 		 * "Валентин Заблокировский", "blocked")); } catch (SQLException e) { //
@@ -26,6 +31,22 @@ public class CustomerDAOTest {
 			System.out.println(customer.getName());
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+	}
+
+	public static Customer testGetJohn() {
+		return testGetCustomer("john@foo.com");
+	}
+
+	private static Customer testGetCustomer(String email) {
+		// TODO Auto-generated method stub
+		CustomerDAO customerDAO = new CustomerDAO();
+		try {
+			return customerDAO.getCustomer("john@foo.com");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return new Customer("some@email.com", "12345", "John Another");
 		}
 	}
 
@@ -73,6 +94,23 @@ public class CustomerDAOTest {
 			e.printStackTrace();
 		}
 		return -1;
+	}
+
+	public static void testRenameCustomer(Customer customer, String new_name) {
+		System.out.printf("Let's try to rename %s to %s\n", customer.getName(), new_name);
+		String email = customer.getEmail();
+		CustomerDAO customerDAO = new CustomerDAO();
+
+		Customer hopefullyTheSameCustomer = null;
+		try {
+			CustomerDAO.renameCustomer(customer, new_name);
+			hopefullyTheSameCustomer = customerDAO.getCustomer(email);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.printf("Their name is now %s.", hopefullyTheSameCustomer.getName());
+
 	}
 
 }
