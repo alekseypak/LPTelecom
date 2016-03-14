@@ -17,7 +17,7 @@ public class InvoiceDAOTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		statusUpdateTest("john@foo.com", true);
+		statusUpdateTest("john@foo.com");
 
 	}
 
@@ -71,22 +71,25 @@ public class InvoiceDAOTest {
 
 	}
 
-	private static void statusUpdateTest(String email, boolean payed) {
+	private static void statusUpdateTest(String email) {
 		System.out.println("Let's try to change an invoice status.");
 
 		List<Invoice> invoiceList;
 		try {
 			invoiceList = InvoiceDAO.getInvoicesForEmail(email);
-			listGetterWithEmailTest(email);
 			if (!invoiceList.isEmpty()) {
 				Invoice invoice = invoiceList.get(0);
-				try {
-					InvoiceDAO.SetInvoiceStatus(invoice, payed ? "payed" : "not payed", payed);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				listGetterWithEmailTest(email);
+				System.out.printf("Its billed to %s for %s and the status is %s.\n",
+						invoice.getInvoiceCustomer().getName(), invoice.getInvoiceTelecomService().getName(),
+						invoice.getStatus());
+				boolean payed_to_set = !invoice.isPayed();
+				InvoiceDAO.SetInvoiceStatus(invoice, payed_to_set ? "payed" : "not payed", payed_to_set);
+				invoiceList = InvoiceDAO.getInvoicesForEmail(email);
+				Invoice hopefully_update_invoice = invoiceList.get(0);
+				System.out.printf("Its billed to %s for %s and the status is %s.\n",
+						hopefully_update_invoice.getInvoiceCustomer().getName(),
+						hopefully_update_invoice.getInvoiceTelecomService().getName(),
+						hopefully_update_invoice.getStatus());
 			}
 
 		} catch (

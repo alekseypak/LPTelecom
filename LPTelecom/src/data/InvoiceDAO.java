@@ -93,11 +93,9 @@ public class InvoiceDAO {
 		// We have a TinyInt(1) instead.>
 		statement.setInt(3, CustomerDAO.getCustomerId(invoice.getInvoiceCustomer()));
 		statement.setInt(4, invoice.getInvoiceTelecomService().getId());
-		System.out.println(statement.toString());
 		int result = statement.executeUpdate();
-		System.out.println(result);
 		statement.close();
-		return true;
+		return result == 1;
 	}
 
 }
