@@ -82,8 +82,7 @@ public class InvoiceDAOTest {
 				System.out.printf("Its billed to %s for %s and the status is %s.\n",
 						invoice.getInvoiceCustomer().getName(), invoice.getInvoiceTelecomService().getName(),
 						invoice.getStatus());
-				boolean payed_to_set = !invoice.isPayed();
-				InvoiceDAO.SetInvoiceStatus(invoice, payed_to_set ? "payed" : "not payed", payed_to_set);
+				InvoiceDAO.SetInvoiceStatus(invoice, !invoice.isPayed());
 				invoiceList = InvoiceDAO.getInvoicesForEmail(email);
 				Invoice hopefully_update_invoice = invoiceList.get(0);
 				System.out.printf("Its billed to %s for %s and the status is %s.\n",

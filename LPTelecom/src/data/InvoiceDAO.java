@@ -98,4 +98,8 @@ public class InvoiceDAO {
 		return result == 1;
 	}
 
+	public static boolean SetInvoiceStatus(Invoice invoice, boolean payed) throws SQLException {
+		return SetInvoiceStatus(invoice, payed ? "payed" : "not payed", payed);
+	}
+
 }
