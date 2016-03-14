@@ -1,6 +1,8 @@
 package data;
 
-public class Customer {
+import java.io.Serializable;
+
+public class Customer implements Serializable {
 
 	private String email;
 	private String password;

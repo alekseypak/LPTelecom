@@ -1,6 +1,8 @@
 package data;
 
-public class Invoice {
+import java.io.Serializable;
+
+public class Invoice implements Serializable {
 	private Customer invoiceCustomer;
 	private TelecomService invoiceTelecomService;
 	private boolean payed;
