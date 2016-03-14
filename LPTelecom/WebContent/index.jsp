@@ -13,7 +13,7 @@
 <li><a href="/LPTelecom/ControllerListAllServices?lang=rus">Список услуг</a></li>
 <li><a href="login.jsp">Log in</a></li>
 <li><a href="signup.jsp">Sign up</a></li>
-<li>Admin log in</li>
+<li><a href="adminlogin.jsp">Admin log in</a></li>
 </ul>
 
 </body>
