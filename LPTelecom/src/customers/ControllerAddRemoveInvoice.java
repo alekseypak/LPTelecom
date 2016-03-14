@@ -13,20 +13,21 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import data.Customer;
+import data.CustomerDAO;
 import data.Invoice;
 import data.InvoiceDAO;
 
 /**
- * Servlet implementation class ControllerPayment
+ * Servlet implementation class ControllerAddRemoveInvoice
  */
-@WebServlet("/ControllerPayment")
-public class ControllerPayment extends HttpServlet {
+@WebServlet("/ControllerAddRemoveInvoice")
+public class ControllerAddRemoveInvoice extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public ControllerPayment() {
+	public ControllerAddRemoveInvoice() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -53,23 +54,11 @@ public class ControllerPayment extends HttpServlet {
 		HttpSession session = request.getSession();
 		String email = request.getParameter("email");
 		String service_id_string = request.getParameter("service_id");
+		String action_type = request.getParameter("action_type");
 		int service_id = Integer.parseInt(service_id_string);
-		// What could go wrong? :)
-		boolean payed_now = false;
-		String payed_now_string = request.getParameter("payed_now");
-		if (payed_now_string != null) {
-			payed_now = payed_now_string.equals("true");
-		}
-
+		System.out.printf("%s tried to remove %s", email, service_id_string);
 		List<Invoice> invoiceList = new ArrayList<Invoice>();
 		Invoice invoice_to_be_updated = null;
-		// That doesn't look like a good idea.
-		// TODO: ask someone about the idiomatic solution.
-		// The problem is: what to do if a large portion of the code relies on
-		// something that might fail.
-		// It's a good idea to keep as little as possible in the try section.
-		// Or is it?
-
 		try {
 			invoiceList = InvoiceDAO.getInvoicesForEmail(email);
 		} catch (SQLException e1) {
@@ -84,25 +73,25 @@ public class ControllerPayment extends HttpServlet {
 				break;
 			}
 		}
+		Invoice badInvoice = invoice_to_be_updated;
 		try {
-			InvoiceDAO.setInvoiceStatus(invoice_to_be_updated, payed_now);
-			String success_message = "Successful payment for "
-					+ invoice_to_be_updated.getInvoiceTelecomService().getName();
-			request.setAttribute("message", success_message);
-			Customer customer = (Customer) session.getAttribute("customer");
-			session.setAttribute("invoices", InvoiceDAO.getInvoicesForCustomer(customer));
-			// session.setAttribute("all_services",
-			// TelecomServiceDAO.getAllTelecomServices());
-			// System.out.println("Email " + email + " found! Password
-			// correct.");
-
-			request.getRequestDispatcher("/loginsuccess.jsp").forward(request, response);
-			return;
+			InvoiceDAO.deleteInvoice(badInvoice);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		String success_message = "Unsubscribed from  " + invoice_to_be_updated.getInvoiceTelecomService().getName();
+		request.setAttribute("message", success_message);
+		CustomerDAO customerDAO = new CustomerDAO();
+		try {
+			Customer customer = customerDAO.getCustomer(email);
+			session.setAttribute("invoices", InvoiceDAO.getInvoicesForCustomer(customer));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			response.sendRedirect("/LPTelecom/");
+		}
+		request.getRequestDispatcher("/loginsuccess.jsp").forward(request, response);
 	}
 
 }
