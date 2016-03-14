@@ -22,6 +22,27 @@ public class CustomerDAOTest {
 		 * TODO Auto-generated catch block e.printStackTrace(); }
 		 */
 
+		testChangeCustomerStatus(testGetJohn());
+	}
+
+	private static boolean testChangeCustomerStatus(Customer customer) {
+		// TODO Auto-generated method stub
+		String status = customer.getStatus();
+		return testChangeCustomerStatus(customer, status.equals("active") ? "blocked" : "active");
+
+	}
+
+	public static boolean testChangeCustomerStatus(Customer customer, String newStatus) {
+		System.out.printf("Let's try to change %s status from %s to %s.\n", customer.getEmail(), customer.getStatus(),
+				newStatus);
+		try {
+			CustomerDAO.changeCustomerStatus(customer, newStatus);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.printf("New status is: %s\n", testGetCustomer(customer.getEmail()).getStatus());
+		return true;
 	}
 
 	public static void testJohn(CustomerDAO customerDAO) {

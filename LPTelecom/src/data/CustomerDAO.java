@@ -120,4 +120,25 @@ public class CustomerDAO {
 		return result == 1;
 
 	}
+
+	public static boolean changeCustomerStatus(String email, String newStatus) throws SQLException {
+		String query = "UPDATE customers " + "SET status = ? "
+				+ "WHERE customer_id = (SELECT customer_id FROM (SELECT * FROM customers) "
+				+ "AS same_customers WHERE email = ?);";
+
+		Connection connection = getConnection();
+		PreparedStatement statement = connection.prepareStatement(query);
+
+		statement.setString(1, newStatus);
+		statement.setString(2, email);
+		System.out.println(statement.toString());
+		int result = statement.executeUpdate();
+		statement.close();
+		return result == 1;
+	}
+
+	public static boolean changeCustomerStatus(Customer customer, String newStatus) throws SQLException {
+		return changeCustomerStatus(customer.getEmail(), newStatus);
+
+	}
 }
