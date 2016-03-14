@@ -83,36 +83,28 @@ public class ControllerLogin extends HttpServlet {
 					session.setAttribute("invoices", invoicesForCustomer);
 					List<TelecomService> allTelecomServices = TelecomServiceDAO.getAllTelecomServices();
 					session.setAttribute("all_services", allTelecomServices);
-					List<TelecomService> missingTelecomServices = new LinkedList<TelecomService>();
+					List<TelecomService> missingTelecomServices = new LinkedList<TelecomService>(allTelecomServices);
 					List<TelecomService> customerTelecomServices = new LinkedList<TelecomService>();
 					for (Invoice customerInvoice : invoicesForCustomer) {
 						customerTelecomServices.add(customerInvoice.getInvoiceTelecomService());
 					}
-					for (TelecomService ts : allTelecomServices) {
-						System.out.println(ts.getName());
-						System.out.println(customerTelecomServices.contains(ts));
-						System.out.println(customerTelecomServices.indexOf(ts));
-						if (!customerTelecomServices.contains(ts)) {
-							missingTelecomServices.add(ts);
-						}
-					}
+					missingTelecomServices.removeAll(customerTelecomServices);
 
-					System.out.println("Listing all TelecomServices");
-					for (TelecomService ts : allTelecomServices) {
-						System.out.println(ts.getName());
-					}
-					System.out.println("Listing customer TelecomServices");
-					for (TelecomService ts : customerTelecomServices) {
-						System.out.println(ts.getName());
-					}
-					System.out.println(allTelecomServices.get(1).getName());
-					System.out.println(customerTelecomServices.get(0).getName());
-					System.out.println(allTelecomServices.get(1).equals(customerTelecomServices.get(0)));
-					System.out.println(allTelecomServices.get(1).getId() == customerTelecomServices.get(0).getId());
+					// for (TelecomService ts : allTelecomServices) {
+					//// System.out.println(ts.getName());
+					//// System.out.println(customerTelecomServices.contains(ts));
+					//// System.out.println(customerTelecomServices.indexOf(ts));
+					// if (!customerTelecomServices.contains(ts)) {
+					// missingTelecomServices.add(ts);
+					// }
+					// }
+					// System.out.println(allTelecomServices.get(1).getName());
+					// System.out.println(customerTelecomServices.get(0).getName());
+					// System.out.println(allTelecomServices.get(1).equals(customerTelecomServices.get(0)));
+					// System.out.println(allTelecomServices.get(1).getId() ==
+					// customerTelecomServices.get(0).getId());
 					// missingTelecomServices.removeAll(customerTelecomServices);
 					session.setAttribute("missingServices", missingTelecomServices);
-					System.out.printf("There are %d missing services and %d customer services.\n",
-							missingTelecomServices.size(), customerTelecomServices.size());
 					String success_message = "Login with email " + email + " successful!";
 					request.setAttribute("message", success_message);
 					System.out.println(success_message);
