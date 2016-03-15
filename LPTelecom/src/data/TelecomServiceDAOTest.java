@@ -2,39 +2,20 @@ package data;
 
 import java.sql.SQLException;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 public class TelecomServiceDAOTest {
-	public static void main(String[] args) {
-		listGetterTest();
-		getByIdTest(1);
+
+	@Test
+	public void testGetAllTelecomServices() throws SQLException {
+		Assert.assertEquals(3, TelecomServiceDAO.getAllTelecomServices().size());
 	}
 
-	private static void listGetterTest() {
-		// Why is this not called getAllTelecomServicesTest? Perhaps it might
-		// clash with a pre-rolled test framework.
-		System.out.println("Let's try to get all the services...");
-		try {
-			for (TelecomService ts : TelecomServiceDAO.getAllTelecomServices()) {
-				System.out.printf("%s: %s: %s\n", ts.getId(), ts.getName(), ts.getDescr());
-
-			}
-			;
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	private static TelecomService getByIdTest(int id) {
-		System.out.printf("Let's try to get the service with id %s...\n", id);
-		try {
-			TelecomService telecomServiceRetvievedById = TelecomServiceDAO.getTelecomServiceById(id);
-			System.out.println(telecomServiceRetvievedById.getName());
-			return telecomServiceRetvievedById;
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
+	@Test
+	public void testGetTelecomServiceById() throws SQLException {
+		TelecomService telecomServiceRetvievedById = TelecomServiceDAO.getTelecomServiceById(1);
+		Assert.assertEquals("Telephony", telecomServiceRetvievedById.getName());
 	}
 
 }
