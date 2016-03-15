@@ -33,21 +33,31 @@
 				<td><c:if test="${!invoice.payed && invoice.invoiceCustomer.status != 'blocked'}">
 				<form method="post" action="/LPTelecom/ControllerAdminBlockAndActivateCustomer">
 				
-							<input type="hidden" name="email" value="${customer.email}"> 
+							<input type="hidden" name="email" value="${invoice.invoiceCustomer.email}">
+							<input type="hidden" name="customer_status" value="${invoice.invoiceCustomer.status}"> 
 							<input type="hidden" name="action_type" value="block"> 							 
 							<input type="submit" value="Block customer">
 				
-					</form></c:if></td>
-					<td>
+					</form></c:if>
 					<c:if test="${invoice.invoiceCustomer.status == 'blocked'}">
 				<form method="post" action="/LPTelecom/ControllerAdminBlockAndActivateCustomer">
-				
-							<input type="hidden" name="email" value="${customer.email}"> 
+							
+							<input type="hidden" name="email" value="${invoice.invoiceCustomer.email}">
+							<input type="hidden" name="customer_status" value="${invoice.invoiceCustomer.status}"> 
 							<input type="hidden" name="action_type" value="activate">  						
 							<input type="submit" value="Activate customer">
 				
 					</form></c:if>
+					
 					</td>
+					<td><form method="post" action="/LPTelecom/ControllerAdminBlockAndActivateCustomer">
+				
+							<input type="hidden" name="email" value="${invoice.invoiceCustomer.email}">
+							<input type="hidden" name="customer_status" value="${invoice.invoiceCustomer.status}"> 
+							<input type="hidden" name="action_type" value="block"> 							 
+							<input type="submit" value="Force block customer">
+				
+					</form></td>
 			</tr>
 			</c:forEach>
 		</table>
