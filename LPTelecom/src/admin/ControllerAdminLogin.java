@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import data.AdminDAO;
 import data.Invoice;
 import data.InvoiceDAO;
 
@@ -48,20 +49,26 @@ public class ControllerAdminLogin extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		String admin_login = request.getParameter("admin_login");
+		String admin_password = request.getParameter("admin_password");
+		if (AdminDAO.AdminLoginAndPasswordMatch(admin_login, admin_password)) {
 
-		List<Invoice> allInvoices = new ArrayList<Invoice>();
-		try {
-			allInvoices = InvoiceDAO.getAllInvoices();
-			request.setAttribute("allInvoices", allInvoices);
+			List<Invoice> allInvoices = new ArrayList<Invoice>();
+			try {
+				allInvoices = InvoiceDAO.getAllInvoices();
+				request.setAttribute("allInvoices", allInvoices);
 
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			request.getRequestDispatcher("/admin.jsp").forward(request, response);
+			// response.sendRedirect("/LPTelecom/");
+			// doGet(request, response);
+		} else {
+			response.sendRedirect("/LPTelecom/adminlogin.jsp");
+			// response.redic
 		}
-		request.getRequestDispatcher("/admin.jsp").forward(request, response);
-		// response.sendRedirect("/LPTelecom/");
-		// doGet(request, response);
-
 	}
 
 }

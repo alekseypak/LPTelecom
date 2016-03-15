@@ -14,8 +14,8 @@
 
 <form method="post" action="/LPTelecom/ControllerAdminLogin">
 <input type="hidden" name="action" value="dologin">
-<input type="text" name="email">
-<input type="text" name="password">
+<input type="text" name="admin_login">
+<input type="text" name="admin_password">
 <input type="submit" value="Log In">
 </form>
 
