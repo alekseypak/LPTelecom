@@ -57,6 +57,8 @@ public class TelecomServiceDAO {
 
 			TelecomService newService = new TelecomService(id, service_name, service_name_alt, description,
 					description_alt);
+			rs.close();
+			connection.close();
 			return newService;
 		}
 		return null;

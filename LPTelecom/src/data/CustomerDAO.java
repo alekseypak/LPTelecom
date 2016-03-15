@@ -31,6 +31,8 @@ public class CustomerDAO {
 			String status = rs.getString("status");
 			customer = new Customer(email, password, name, status);
 		}
+		rs.close();
+		connection.close();
 		return customer;
 
 	}
@@ -49,7 +51,8 @@ public class CustomerDAO {
 			// System.out.println(email + " " + c);
 			return c > 0;
 		}
-
+		rs.close();
+		connection.close();
 		return false;
 	}
 
@@ -63,9 +66,11 @@ public class CustomerDAO {
 		statement.setString(2, newCustomer.getPassword());
 		statement.setString(3, newCustomer.getName());
 		statement.setString(4, newCustomer.getStatus());
-		statement.executeUpdate();
+		int result = statement.executeUpdate();
 		statement.close();
-		return true;
+
+		connection.close();
+		return result == 1;
 	}
 
 	public boolean deleteCustomer(Customer badCustomer) throws SQLException {
@@ -74,9 +79,10 @@ public class CustomerDAO {
 
 		PreparedStatement statement = connection.prepareStatement(query);
 		statement.setString(1, badCustomer.getEmail());
-		statement.executeUpdate();
+		int result = statement.executeUpdate();
 		statement.close();
-		return true;
+		connection.close();
+		return result == 1;
 	}
 
 	public static int getCustomerId(Customer customer) throws SQLException {
@@ -93,6 +99,8 @@ public class CustomerDAO {
 			int customer_id = rs.getInt("customer_id");
 			return customer_id;
 		}
+		rs.close();
+		connection.close();
 		return -1;
 	}
 
@@ -114,9 +122,10 @@ public class CustomerDAO {
 
 		statement.setString(1, new_name);
 		statement.setString(2, customer.getEmail());
-		System.out.println(statement.toString());
+		// System.out.println(statement.toString());
 		int result = statement.executeUpdate();
 		statement.close();
+		connection.close();
 		return result == 1;
 
 	}
@@ -134,6 +143,7 @@ public class CustomerDAO {
 		// System.out.println(statement.toString());
 		int result = statement.executeUpdate();
 		statement.close();
+		connection.close();
 		return result == 1;
 	}
 
