@@ -36,7 +36,7 @@ public class ConnectionProvider {
 	public static Connection getConnection() {
 		Connection connection = null;
 		try {
-			DataSource dds = ConnectionProvider.instance.ds;
+			DataSource dds = ConnectionProvider.ds;
 			connection = dds.getConnection();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
