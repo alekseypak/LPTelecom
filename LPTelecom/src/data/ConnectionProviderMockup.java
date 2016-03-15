@@ -1,15 +1,30 @@
 package data;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.FileHandler;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 public class ConnectionProviderMockup {
 
 	private static final Logger LOGGER = Logger.getLogger(ConnectionProviderMockup.class.getName());
 
 	public static Connection getConnection() {
+		try {
+
+			FileHandler fileHandler = new FileHandler("Logs/LPTelecomLog.txt", 1_000_000, 1);
+			fileHandler.setFormatter(new SimpleFormatter());
+			LOGGER.addHandler(fileHandler);
+		} catch (SecurityException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
