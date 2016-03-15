@@ -36,6 +36,7 @@ public class InvoiceDAO {
 			String invoice_status = rs.getString("invoice_status");
 			invoiceList.add(new Invoice(customer, newService, payed, invoice_status));
 		}
+		rs.close();
 		statement.close();
 		return invoiceList;
 
@@ -75,6 +76,7 @@ public class InvoiceDAO {
 			String invoice_status = rs.getString("invoice_status");
 			invoiceList.add(new Invoice(customer, newService, payed, invoice_status));
 		}
+		rs.close();
 		statement.close();
 		return invoiceList;
 
@@ -94,6 +96,7 @@ public class InvoiceDAO {
 		statement.setInt(3, CustomerDAO.getCustomerId(invoice.getInvoiceCustomer()));
 		statement.setInt(4, invoice.getInvoiceTelecomService().getId());
 		int result = statement.executeUpdate();
+
 		statement.close();
 		return result == 1;
 	}
@@ -114,9 +117,9 @@ public class InvoiceDAO {
 		PreparedStatement statement = connection.prepareStatement(query);
 		statement.setInt(1, CustomerDAO.getCustomerIdByEmail(badInvoice.getInvoiceCustomer().getEmail()));
 		statement.setInt(2, badInvoice.getInvoiceTelecomService().getId());
-		statement.executeUpdate();
+		int result = statement.executeUpdate();
 		statement.close();
-		return true;
+		return result == 1;
 	}
 
 	public static boolean insertInvoice(Invoice newInvoice) throws SQLException {
@@ -130,9 +133,9 @@ public class InvoiceDAO {
 		statement.setInt(2, newInvoice.getInvoiceTelecomService().getId());
 		statement.setInt(3, newInvoice.isPayed() ? 1 : 0);
 		statement.setString(4, newInvoice.getStatus());
-		statement.executeUpdate();
+		int result = statement.executeUpdate();
 		statement.close();
-		return true;
+		return result == 1;
 	}
 
 }
