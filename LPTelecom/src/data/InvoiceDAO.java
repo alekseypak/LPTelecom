@@ -48,7 +48,7 @@ public class InvoiceDAO {
 	public static List<Invoice> getInvoicesForEmail(String email) throws SQLException {
 		String query = "SELECT * FROM customers JOIN invoices JOIN telecom_services "
 				+ "ON customers.customer_id = invoices.customer_id AND invoices.service_id = telecom_services.service_id "
-				+ "WHERE email = ? ";
+				+ "WHERE email = ? ORDER BY customers.name";
 		Connection connection = getConnection();
 
 		PreparedStatement statement = connection.prepareStatement(query);

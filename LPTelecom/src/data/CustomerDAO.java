@@ -131,7 +131,7 @@ public class CustomerDAO {
 
 		statement.setString(1, newStatus);
 		statement.setString(2, email);
-		System.out.println(statement.toString());
+		// System.out.println(statement.toString());
 		int result = statement.executeUpdate();
 		statement.close();
 		return result == 1;
