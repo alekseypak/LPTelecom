@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,6 +35,8 @@ public class ControllerLogin extends HttpServlet {
 		// TODO Auto-generated constructor stub
 	}
 
+	private static final Logger LOGGER = Logger.getLogger(ControllerLogin.class.getName());
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
@@ -57,12 +60,15 @@ public class ControllerLogin extends HttpServlet {
 		// TODO Auto-generated method stub
 		// doGet(request, response);
 		String action = request.getParameter("action");
+		String error_message = "No error!";
 		if (action != null && action.equals("dologin")) {
 			String email = request.getParameter("email");
 			String password = request.getParameter("password");
 			if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
-				request.setAttribute("error_message", "Email and password should be both non-empty");
-				request.getRequestDispatcher("/loginfailed.jsp").forward(request, response);
+				error_message = "Email and password should be both non-empty.";
+				request.setAttribute("error_message", error_message);
+				LOGGER.info(error_message);
+				request.getRequestDispatcher("/login.jsp").forward(request, response);
 				return;
 			}
 			CustomerDAO customerDAO = new CustomerDAO();
@@ -90,40 +96,32 @@ public class ControllerLogin extends HttpServlet {
 					}
 					missingTelecomServices.removeAll(customerTelecomServices);
 
-					// for (TelecomService ts : allTelecomServices) {
-					//// System.out.println(ts.getName());
-					//// System.out.println(customerTelecomServices.contains(ts));
-					//// System.out.println(customerTelecomServices.indexOf(ts));
-					// if (!customerTelecomServices.contains(ts)) {
-					// missingTelecomServices.add(ts);
-					// }
-					// }
-					// System.out.println(allTelecomServices.get(1).getName());
-					// System.out.println(customerTelecomServices.get(0).getName());
-					// System.out.println(allTelecomServices.get(1).equals(customerTelecomServices.get(0)));
-					// System.out.println(allTelecomServices.get(1).getId() ==
-					// customerTelecomServices.get(0).getId());
-					// missingTelecomServices.removeAll(customerTelecomServices);
 					session.setAttribute("missingServices", missingTelecomServices);
 					String success_message = "Login with email " + email + " successful!";
 					request.setAttribute("message", success_message);
+					LOGGER.info(success_message);
 					System.out.println(success_message);
 					request.getRequestDispatcher("/loginsuccess.jsp").forward(request, response);
 					return;
 				} else {
+
 					if (customer == null) {
-						request.setAttribute("error_message", "email " + email + " not found");
+						error_message = "email " + email + " not found.";
+						request.setAttribute("error_message", error_message);
+						LOGGER.info(error_message);
 					}
 					if (customer != null && !password.equals(customer.getPassword())) {
-						request.setAttribute("error_message", "Wrong password for email " + email);
+						error_message = "Wrong password for email " + email + ".";
+						request.setAttribute("error_message", error_message);
+						LOGGER.info(error_message);
 					}
-					request.getRequestDispatcher("/loginfailed.jsp").forward(request, response);
+					request.getRequestDispatcher("/login.jsp").forward(request, response);
 					return;
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				System.out.println("Password lookup failed!");
+				LOGGER.severe("Password SQL lookup failed!");
 			}
 
 		}
