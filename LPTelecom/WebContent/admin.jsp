@@ -38,8 +38,8 @@
 							<input type="hidden" name="email" value="${invoice.invoiceCustomer.email}">
 							<input type="hidden" name="customer_status" value="${invoice.invoiceCustomer.status}"> 
 							<input type="hidden" name="action_type" value="block">
-							<input type="hidden" name="admin_login" value="admin"> 							 
-							<input type="hidden" name="admin_password" value="admin">
+							<!-- <input type="hidden" name="admin_login" value="admin"> 							 
+							<input type="hidden" name="admin_password" value="admin"> -->
 							<input type="submit" value="Block customer">
 				
 					</form></c:if>
@@ -49,8 +49,8 @@
 							<input type="hidden" name="email" value="${invoice.invoiceCustomer.email}">
 							<input type="hidden" name="customer_status" value="${invoice.invoiceCustomer.status}"> 
 							<input type="hidden" name="action_type" value="activate">
-							<input type="hidden" name="admin_login" value="admin"> 							 
-							<input type="hidden" name="admin_password" value="admin">
+							<!-- <input type="hidden" name="admin_login" value="admin"> 							 
+							<input type="hidden" name="admin_password" value="admin"> -->
 							  						
 							<input type="submit" value="Activate customer">
 				
@@ -64,9 +64,9 @@
 							<input type="hidden" name="email" value="${invoice.invoiceCustomer.email}">
 							<input type="hidden" name="customer_status" value="${invoice.invoiceCustomer.status}"> 
 							<input type="hidden" name="action_type" value="block">
-							<input type="hidden" name="admin_login" value="admin"> 							 
+<!-- 							<input type="hidden" name="admin_login" value="admin"> 							 
 							<input type="hidden" name="admin_password" value="admin">
-							 							 
+ -->							 							 
 							<input type="submit" value="Force block customer">
 				
 					</form></c:if></td>

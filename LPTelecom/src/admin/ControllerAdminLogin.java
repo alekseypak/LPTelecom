@@ -51,9 +51,18 @@ public class ControllerAdminLogin extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		HttpSession session = request.getSession();
 		String admin_login = request.getParameter("admin_login");
 		String admin_password = request.getParameter("admin_password");
-		if (AdminDAO.AdminLoginAndPasswordMatch(admin_login, admin_password)) {
+		if (session.getAttribute("admin_logged_in") != null) {
+			System.out.println(session.getAttribute("admin_logged_in"));
+			// This displays true (without any type casting). Interestingly
+			// enough, I've casted it to Boolean implicitly and Eclipse removed
+			// the cast. This seems surprising which is without doubt a sign of
+			// poor understanding of Java object model on my part.
+		}
+		if (session.getAttribute("admin_logged_in") != null
+				|| AdminDAO.AdminLoginAndPasswordMatch(admin_login, admin_password)) {
 
 			List<Invoice> allInvoices = new ArrayList<Invoice>();
 			List<Customer> allCustomers = new ArrayList<Customer>();
@@ -66,11 +75,13 @@ public class ControllerAdminLogin extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
+			session.setAttribute("admin_logged_in", true);
 			request.getRequestDispatcher("/admin.jsp").forward(request, response);
 			// response.sendRedirect("/LPTelecom/");
 			// doGet(request, response);
 		} else {
-			HttpSession session = request.getSession();
+
 			session.setAttribute("error_message", "Wrong credentials!");
 			response.sendRedirect("/LPTelecom/adminlogin.jsp");
 		}
