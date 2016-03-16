@@ -66,7 +66,7 @@ public class ControllerSignUp extends HttpServlet {
 				// HttpSession session = request.getSession();
 				// getSession(false) means a session is not to be created if it
 				// doesn't exist.
-				message = "All fields should be both non-empty";
+				message = "All fields should be both non-empty.";
 				LOGGER.info(message);
 				request.setAttribute("message", message);
 				request.getRequestDispatcher("/signup.jsp").forward(request, response);
@@ -97,7 +97,7 @@ public class ControllerSignUp extends HttpServlet {
 			}
 
 			if (!password.equals(repeat_password)) {
-				message = "Passwords do not match";
+				message = "Passwords do not match.";
 				request.setAttribute("message", message);
 				LOGGER.info(message);
 				request.getRequestDispatcher("/signup.jsp").forward(request, response);
