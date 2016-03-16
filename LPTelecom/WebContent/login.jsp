@@ -21,7 +21,7 @@
 <input type="submit" value="Log In">
 </form>
 
-<c:if test="${error_message != null}"><p><strong><c:out value="${error_message}" /></strong></p></c:if>
+<c:if test="${message != null}"><p><strong><c:out value="${message}" /></strong></p></c:if>
 
 
 </body>

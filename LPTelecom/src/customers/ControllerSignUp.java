@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import data.Customer;
 import data.CustomerDAO;
@@ -57,6 +58,7 @@ public class ControllerSignUp extends HttpServlet {
 
 			String email = request.getParameter("email");
 			String password = request.getParameter("password");
+			String message = "Something went wrong.";
 			String repeat_password = request.getParameter("repeat_password");
 			String name = request.getParameter("name");
 			if (email == null || email.isEmpty() || password == null || password.isEmpty() || name == null
@@ -64,24 +66,28 @@ public class ControllerSignUp extends HttpServlet {
 				// HttpSession session = request.getSession();
 				// getSession(false) means a session is not to be created if it
 				// doesn't exist.
-				request.setAttribute("error_message", "All fields should be both non-empty");
-				response.sendRedirect("/LPTelecom/signup.jsp");
-				// request.getRequestDispatcher("/signup.jsp").forward(request,
-				// response);
+				message = "All fields should be both non-empty";
+				LOGGER.info(message);
+				request.setAttribute("message", message);
+				request.getRequestDispatcher("/signup.jsp").forward(request, response);
 				return;
 			}
 
 			if (!email.contains("@")) {
 				// This is a not production grade email validation, obviously.
 				// A proper regular expression is notoriously hard to write.
-				request.setAttribute("error_message", email + " doesn't look like a valid email address.");
+				message = email + " doesn't look like a valid email address.";
+				LOGGER.info(message);
+				request.setAttribute("message", message);
 				request.getRequestDispatcher("/signup.jsp").forward(request, response);
 				return;
 			}
 
 			try { // Perhaps this should be higher up?
 				if (CustomerDAO.customerWithEmailExists(email)) {
-					request.setAttribute("error_message", "User with email " + email + " already exists.");
+					message = "User with email " + email + " already exists.";
+					request.setAttribute("message", message);
+					LOGGER.info(message);
 					request.getRequestDispatcher("/signup.jsp").forward(request, response);
 					return;
 				}
@@ -91,7 +97,9 @@ public class ControllerSignUp extends HttpServlet {
 			}
 
 			if (!password.equals(repeat_password)) {
-				request.setAttribute("error_message", "Passwords do not match");
+				message = "Passwords do not match";
+				request.setAttribute("message", message);
+				LOGGER.info(message);
 				request.getRequestDispatcher("/signup.jsp").forward(request, response);
 				return;
 
@@ -101,7 +109,11 @@ public class ControllerSignUp extends HttpServlet {
 			CustomerDAO customerDAO = new CustomerDAO();
 			try {
 				customerDAO.addCustomer(newCustomer);
-				LOGGER.info("Customer with email " + email + " created.");
+				message = "Customer with email " + email + " created.";
+				HttpSession session = request.getSession();
+				session.setAttribute("message", message);
+				LOGGER.info(message);
+
 				response.sendRedirect("/LPTelecom/login.jsp");
 				// request.setAttribute("message", );
 			} catch (SQLException e) {
