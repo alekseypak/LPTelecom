@@ -1,6 +1,7 @@
 package customers;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/ControllerLogout")
 public class ControllerLogout extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
+	private static final Logger LOGGER = Logger.getLogger(ControllerLogout.class.getName());
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -31,10 +34,10 @@ public class ControllerLogout extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();
 		session.invalidate();
-		System.out.printf("User logged out");
+
+		LOGGER.info("User logged out.");
 		response.sendRedirect("/LPTelecom/");
 	}
 

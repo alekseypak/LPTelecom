@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,6 +28,8 @@ import data.TelecomServiceDAO;
 @WebServlet("/ControllerAddRemoveInvoice")
 public class ControllerAddRemoveInvoice extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
+	private static final Logger LOGGER = Logger.getLogger(ControllerAddRemoveInvoice.class.getName());
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -61,18 +65,18 @@ public class ControllerAddRemoveInvoice extends HttpServlet {
 		int service_id = Integer.parseInt(service_id_string);
 		String success_message = "Something bad happened";
 		if (action_type.equals("unsubscribe")) {
-			System.out.printf("%s is trying to remove service with id %s\n.", email, service_id_string);
+			LOGGER.log(Level.INFO, "{0} is trying to remove service with id {1}.",
+					new Object[] { email, service_id_string });
 			List<Invoice> invoiceList = new ArrayList<Invoice>();
 			Invoice invoice_to_be_updated = null;
 			try {
 				invoiceList = InvoiceDAO.getInvoicesForEmail(email);
 			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				LOGGER.severe("SQL query failed.");
+				LOGGER.log(Level.SEVERE, "Exception caught", e1);
+				response.sendRedirect("/LPTelecom/");
 			}
-			System.out.printf("Correct service id: %d\n", service_id);
 			for (Invoice invoice : invoiceList) {
-				System.out.printf("Current service id: %d\n", invoice.getInvoiceTelecomService().getId());
 				if (invoice.getInvoiceTelecomService().getId() == service_id) {
 					invoice_to_be_updated = invoice;
 					break;
@@ -82,26 +86,31 @@ public class ControllerAddRemoveInvoice extends HttpServlet {
 			try {
 				InvoiceDAO.deleteInvoice(badInvoice);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOGGER.severe("SQL query failed.");
+				LOGGER.log(Level.SEVERE, "Exception caught", e);
+				response.sendRedirect("/LPTelecom/");
 			}
-			success_message = "Unsubscribed from  " + invoice_to_be_updated.getInvoiceTelecomService().getName();
+			success_message = email + " unsubscribed from  "
+					+ invoice_to_be_updated.getInvoiceTelecomService().getName() + ".";
 		} else if (action_type.equals("subscribe")) {
-			System.out.printf("%s is trying to add service with id %s", email, service_id_string);
+			LOGGER.log(Level.INFO, "{0} is trying to add service with id {1}.",
+					new Object[] { email, service_id_string });
 			try {
 				TelecomService telecomService = TelecomServiceDAO.getTelecomServiceById(service_id);
 				CustomerDAO customerDAO = new CustomerDAO();
 				Customer customer = customerDAO.getCustomer(email);
 				Invoice newInvoice = new Invoice(customer, telecomService);
 				InvoiceDAO.insertInvoice(newInvoice);
-				success_message = "Subscribed to " + telecomService.getName() + ".";
+				success_message = email + " subscribed to " + telecomService.getName() + ".";
 
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOGGER.severe("SQL query failed.");
+				LOGGER.log(Level.SEVERE, "Exception caught", e);
+				response.sendRedirect("/LPTelecom/");
 			}
 		}
-		System.out.println(success_message);
+		LOGGER.info(success_message);
 		request.setAttribute("message", success_message);
 		CustomerDAO customerDAO = new CustomerDAO();
 		try {
@@ -118,12 +127,13 @@ public class ControllerAddRemoveInvoice extends HttpServlet {
 			}
 			missingTelecomServices.removeAll(customerTelecomServices);
 			session.setAttribute("missingServices", missingTelecomServices);
+			request.getRequestDispatcher("/loginsuccess.jsp").forward(request, response);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.severe("SQL query failed.");
+			LOGGER.log(Level.SEVERE, "Exception caught", e);
 			response.sendRedirect("/LPTelecom/");
 		}
-		request.getRequestDispatcher("/loginsuccess.jsp").forward(request, response);
+
 	}
 
 }

@@ -2,6 +2,7 @@ package customers;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,6 +19,8 @@ import data.CustomerDAO;
 @WebServlet("/ControllerRename")
 public class ControllerRename extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
+	private static final Logger LOGGER = Logger.getLogger(ControllerRename.class.getName());
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -52,17 +55,19 @@ public class ControllerRename extends HttpServlet {
 		String new_name = request.getParameter("new_name");
 		CustomerDAO customerDAO = new CustomerDAO();
 		Customer customer;
-		String message = "Rename unsuccessful";
+		String message = "Rename unsuccessful.";
 		try {
 			customer = customerDAO.getCustomer(email);
 			if (CustomerDAO.renameCustomer(customer, new_name)) {
-				message = "Rename successful";
+				message = "Rename successful.";
+				LOGGER.info(message);
 				request.setAttribute("customer", customerDAO.getCustomer(email));
 				request.setAttribute("message", message);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			LOGGER.severe("SQL query failed.");
 		}
 		request.getRequestDispatcher("/loginsuccess.jsp").forward(request, response);
 

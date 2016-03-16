@@ -2,6 +2,8 @@ package customers;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,6 +21,8 @@ import data.TelecomServiceDAO;
 public class ControllerListAllServices extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	private static final Logger LOGGER = Logger.getLogger(ControllerListAllServices.class.getName());
+
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -34,13 +38,14 @@ public class ControllerListAllServices extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();
 		try {
 			session.setAttribute("all_services", TelecomServiceDAO.getAllTelecomServices());
+			LOGGER.info("List of all services requested.");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.severe("SQL query failed.");
+			LOGGER.log(Level.SEVERE, "Exception caught", e);
+			response.sendRedirect("/LPTelecom/");
 		}
 		String lang = request.getParameter("lang");
 

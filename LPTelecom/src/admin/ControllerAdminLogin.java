@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,6 +26,8 @@ import data.InvoiceDAO;
 @WebServlet("/ControllerAdminLogin")
 public class ControllerAdminLogin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
+	private static final Logger LOGGER = Logger.getLogger(ControllerAdminLogin.class.getName());
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -54,15 +58,17 @@ public class ControllerAdminLogin extends HttpServlet {
 		HttpSession session = request.getSession();
 		String admin_login = request.getParameter("admin_login");
 		String admin_password = request.getParameter("admin_password");
-		if (session.getAttribute("admin_logged_in") != null) {
-			System.out.println(session.getAttribute("admin_logged_in"));
-			// This displays true (without any type casting). Interestingly
-			// enough, I've casted it to Boolean implicitly and Eclipse removed
-			// the cast. This seems surprising which is without doubt a sign of
-			// poor understanding of Java object model on my part.
-		}
+		// if (session.getAttribute("admin_logged_in") != null) {
+		// System.out.println(session.getAttribute("admin_logged_in"));
+		// This displays true (without any type casting). Interestingly
+		// enough, I've casted it to Boolean implicitly and Eclipse removed
+		// the cast. This seems surprising which is without doubt a sign of
+		// poor understanding of Java object model on my part.
+		// }
 		if (session.getAttribute("admin_logged_in") != null
-				|| AdminDAO.AdminLoginAndPasswordMatch(admin_login, admin_password)) {
+				|| AdminDAO.AdminLoginAndPasswordMatch(admin_login, admin_password))
+
+		{
 
 			List<Invoice> allInvoices = new ArrayList<Invoice>();
 			List<Customer> allCustomers = new ArrayList<Customer>();
@@ -72,8 +78,9 @@ public class ControllerAdminLogin extends HttpServlet {
 				allCustomers = CustomerDAO.getAllCustomers();
 				request.setAttribute("allCustomers", allCustomers);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOGGER.severe("SQL query failed.");
+				LOGGER.log(Level.SEVERE, "Exception caught", e);
+				response.sendRedirect("/LPTelecom/");
 			}
 
 			session.setAttribute("admin_logged_in", true);
@@ -82,7 +89,9 @@ public class ControllerAdminLogin extends HttpServlet {
 			// doGet(request, response);
 		} else {
 
-			session.setAttribute("error_message", "Wrong credentials!");
+			String error_message = "Wrong credentials!";
+			session.setAttribute("error_message", error_message);
+			LOGGER.info(error_message);
 			response.sendRedirect("/LPTelecom/adminlogin.jsp");
 		}
 	}

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,6 +24,8 @@ import data.InvoiceDAO;
 @WebServlet("/ControllerPayment")
 public class ControllerPayment extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
+	private static final Logger LOGGER = Logger.getLogger(ControllerPayment.class.getName());
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -74,11 +78,11 @@ public class ControllerPayment extends HttpServlet {
 			invoiceList = InvoiceDAO.getInvoicesForEmail(email);
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			LOGGER.severe("SQL query failed.");
+			LOGGER.log(Level.SEVERE, "Exception caught", e1);
+			response.sendRedirect("/LPTelecom/");
 		}
-		System.out.printf("Correct service id: %d\n", service_id);
 		for (Invoice invoice : invoiceList) {
-			System.out.printf("Current service id: %d\n", invoice.getInvoiceTelecomService().getId());
 			if (invoice.getInvoiceTelecomService().getId() == service_id) {
 				invoice_to_be_updated = invoice;
 				break;
@@ -87,8 +91,9 @@ public class ControllerPayment extends HttpServlet {
 		try {
 			InvoiceDAO.setInvoiceStatus(invoice_to_be_updated, payed_now);
 			String success_message = "Successful payment for "
-					+ invoice_to_be_updated.getInvoiceTelecomService().getName();
+					+ invoice_to_be_updated.getInvoiceTelecomService().getName() + " from " + email + ".";
 			request.setAttribute("message", success_message);
+			LOGGER.info(success_message);
 			Customer customer = (Customer) session.getAttribute("customer");
 			session.setAttribute("invoices", InvoiceDAO.getInvoicesForCustomer(customer));
 			// session.setAttribute("all_services",
@@ -99,8 +104,9 @@ public class ControllerPayment extends HttpServlet {
 			request.getRequestDispatcher("/loginsuccess.jsp").forward(request, response);
 			return;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.severe("SQL query failed.");
+			LOGGER.log(Level.SEVERE, "Exception caught", e);
+			response.sendRedirect("/LPTelecom/");
 		}
 
 	}

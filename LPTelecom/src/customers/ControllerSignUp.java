@@ -2,6 +2,7 @@ package customers;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,6 +19,8 @@ import data.CustomerDAO;
 @WebServlet("/ControllerSignUp")
 public class ControllerSignUp extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
+	private static final Logger LOGGER = Logger.getLogger(ControllerSignUp.class.getName());
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -98,12 +101,14 @@ public class ControllerSignUp extends HttpServlet {
 			CustomerDAO customerDAO = new CustomerDAO();
 			try {
 				customerDAO.addCustomer(newCustomer);
-				System.out.println("Customer " + email + " created");
+				LOGGER.info("Customer with email " + email + " created.");
 				response.sendRedirect("/LPTelecom/login.jsp");
 				// request.setAttribute("message", );
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				LOGGER.severe("SQL query failed.");
+
 			}
 
 		}

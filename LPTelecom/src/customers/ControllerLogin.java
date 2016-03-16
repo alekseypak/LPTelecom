@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -44,9 +45,6 @@ public class ControllerLogin extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// response.getWriter().append("Served at:
-		// ").append(request.getContextPath());
 		response.sendRedirect("/LPTelecom/login.jsp");
 	}
 
@@ -57,8 +55,6 @@ public class ControllerLogin extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// doGet(request, response);
 		String action = request.getParameter("action");
 		String error_message = "No error!";
 		if (action != null && action.equals("dologin")) {
@@ -97,10 +93,9 @@ public class ControllerLogin extends HttpServlet {
 					missingTelecomServices.removeAll(customerTelecomServices);
 
 					session.setAttribute("missingServices", missingTelecomServices);
-					String success_message = "Login with email " + email + " successful!";
+					String success_message = "Logged in with email " + email + ".";
 					request.setAttribute("message", success_message);
 					LOGGER.info(success_message);
-					System.out.println(success_message);
 					request.getRequestDispatcher("/loginsuccess.jsp").forward(request, response);
 					return;
 				} else {
@@ -119,9 +114,9 @@ public class ControllerLogin extends HttpServlet {
 					return;
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				LOGGER.severe("Password SQL lookup failed!");
+				LOGGER.severe("SQL query failed.");
+				LOGGER.log(Level.SEVERE, "Exception caught", e);
+				response.sendRedirect("/LPTelecom/");
 			}
 
 		}
