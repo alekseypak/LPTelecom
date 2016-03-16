@@ -2,6 +2,8 @@ package data;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -9,23 +11,24 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 public class ConnectionProvider {
+
+	private static final Logger LOGGER = Logger.getLogger(ConnectionProvider.class.getName());
 	private static ConnectionProvider instance = new ConnectionProvider();
 	private static DataSource ds;
 
 	private ConnectionProvider() {
-		System.out.println("Trying to create a DataSource.");
+		LOGGER.info("Trying to create a DataSource.");
 		try {
 			InitialContext initContext = new InitialContext();
 
-			System.out.println("Hello1");
+			LOGGER.info("Trying to access context.");
 			Context env = (Context) initContext.lookup("java:comp/env");
-			System.out.println("Hello2");
+
 			ds = (DataSource) env.lookup("jdbc/lptelecom");
-			System.out.println("Created a DataSource.");
+			LOGGER.info("Created a DataSource.");
 		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			// TODO: add logging here.
-			e.printStackTrace();
+			LOGGER.severe("JNDI lookup failed :(");
+			LOGGER.log(Level.SEVERE, "Exception caught", e);
 		}
 	}
 
@@ -38,10 +41,10 @@ public class ConnectionProvider {
 		try {
 			DataSource dds = ConnectionProvider.ds;
 			connection = dds.getConnection();
+			LOGGER.fine("Successfully connected to database.");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			// TODO: add logging here.
-			e.printStackTrace();
+			LOGGER.severe("Database connection failed! :(");
+			LOGGER.log(Level.SEVERE, "Exception caught", e);
 		}
 		return connection;
 	}
