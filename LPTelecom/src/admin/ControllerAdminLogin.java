@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import data.AdminDAO;
+import data.Customer;
+import data.CustomerDAO;
 import data.Invoice;
 import data.InvoiceDAO;
 
@@ -54,10 +56,12 @@ public class ControllerAdminLogin extends HttpServlet {
 		if (AdminDAO.AdminLoginAndPasswordMatch(admin_login, admin_password)) {
 
 			List<Invoice> allInvoices = new ArrayList<Invoice>();
+			List<Customer> allCustomers = new ArrayList<Customer>();
 			try {
 				allInvoices = InvoiceDAO.getAllInvoices();
 				request.setAttribute("allInvoices", allInvoices);
-
+				allCustomers = CustomerDAO.getAllCustomers();
+				request.setAttribute("allCustomers", allCustomers);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

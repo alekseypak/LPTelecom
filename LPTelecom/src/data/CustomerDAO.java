@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class CustomerDAO {
 	// private Connection connection;
@@ -34,7 +36,27 @@ public class CustomerDAO {
 		rs.close();
 		connection.close();
 		return customer;
+	}
 
+	public static List<Customer> getAllCustomers() throws SQLException {
+		String query = "SELECT * FROM customers";
+
+		Connection connection = getConnection();
+		PreparedStatement statement = connection.prepareStatement(query);
+		ResultSet rs = statement.executeQuery();
+		List<Customer> customerList = new LinkedList<>();
+		while (rs.next()) {
+			String email = rs.getString("email");
+			String password = rs.getString("password");
+			String name = rs.getString("name");
+			String status = rs.getString("status");
+
+			customerList.add(new Customer(email, password, name, status));
+			// customer = new Customer(email, password, name);
+		}
+		rs.close();
+		connection.close();
+		return customerList;
 	}
 
 	public static boolean customerWithEmailExists(String email) throws SQLException {
