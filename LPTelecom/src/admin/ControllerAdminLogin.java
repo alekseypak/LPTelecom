@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import data.AdminDAO;
 import data.Invoice;
@@ -48,7 +49,6 @@ public class ControllerAdminLogin extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		String admin_login = request.getParameter("admin_login");
 		String admin_password = request.getParameter("admin_password");
 		if (AdminDAO.AdminLoginAndPasswordMatch(admin_login, admin_password)) {
@@ -66,8 +66,9 @@ public class ControllerAdminLogin extends HttpServlet {
 			// response.sendRedirect("/LPTelecom/");
 			// doGet(request, response);
 		} else {
+			HttpSession session = request.getSession();
+			session.setAttribute("error_message", "Wrong credentials!");
 			response.sendRedirect("/LPTelecom/adminlogin.jsp");
-			// response.redic
 		}
 	}
 
